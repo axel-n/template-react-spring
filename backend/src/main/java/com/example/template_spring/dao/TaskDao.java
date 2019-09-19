@@ -19,21 +19,22 @@ import java.util.Optional;
 @Repository
 public interface TaskDao extends JpaRepository<Task, Long> {
 
-    Page<Task> findByAssigner_Id(int userId, Pageable pageable);
-    Page<Task> findByCreator_Id(int userId, Pageable pageable);
+    Page<Task> findByAssigner_Id(Long userId, Pageable pageable);
+    Page<Task> findByCreator_Id(Long userId, Pageable pageable);
     List<Task> findAll();
 
     @Modifying
     @Transactional
-    @Query("UPDATE Task c SET c.status = :status, c.assigner = :assigner, c.udat = CURRENT_TIMESTAMP WHERE c.id = :taskId")
-    Long updateStatus(@Param("taskId") Long taskId, @Param("assigner") User assigner, @Param("status") TaskStatus status);
+    @Query("UPDATE Task t SET t.status = :status, t.assigner = :assigner, t.udat = CURRENT_TIMESTAMP WHERE t.id = :taskId")
+    int updateStatus(@Param("taskId") Long taskId, @Param("assigner") User assigner, @Param("status") TaskStatus status);
 
     @Modifying
     @Transactional
-    @Query("UPDATE Task c SET c.assignTeam = :assignTeam, c.assigner = null, c.status = 0, c.udat = CURRENT_TIMESTAMP WHERE c.id = :taskId")
-    Long changeAssignTeam(@Param("taskId") Long taskId, @Param("assignTeam") WorkFlow assignTeam);
+    @Query("UPDATE Task t SET t.assignTeam = :assignTeam, t.assigner = null, t.status = 0, t.udat = CURRENT_TIMESTAMP WHERE t.id = :taskId")
+    int changeAssignTeam(@Param("taskId") Long taskId, @Param("assignTeam") WorkFlow assignTeam);
 
     Optional<Task> findById(Long contractId);
+
     List<Task> findByAssignTeam(WorkFlow assignTeam);
 }
 

@@ -3,7 +3,7 @@ import {
     Card, CardBody
 } from "reactstrap";
 
-import TableContracts from "./TableContracts";
+import TableTasks from "./Common/TableTasks";
 import TableFooter from "../../core/TableFooter";
 import {request} from "../../core/utils/request/request";
 import CardHeader from "reactstrap/es/CardHeader";
@@ -24,7 +24,7 @@ class AssignedForMe extends Component {
 
     getData(pagination) {
         let {currentPage, elementsPerPage} = {...this.state.pagination, ...pagination};
-         let url = "/documents/assignedForMe?page=" + currentPage + "&size=" + elementsPerPage;
+         let url = "/tasks/assignedForMe?page=" + currentPage + "&size=" + elementsPerPage;
         return request.sendRequest("GET", url)
             .then(data => {
 
@@ -50,7 +50,7 @@ class AssignedForMe extends Component {
             <Card>
                 <CardHeader>Назначенные на меня</CardHeader>
                 <CardBody>
-                    <TableContracts
+                    <TableTasks
                         list={this.state.data}
                     />
 

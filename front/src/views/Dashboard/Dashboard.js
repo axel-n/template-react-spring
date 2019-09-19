@@ -14,12 +14,7 @@ class Dashboard extends Component {
         super(props);
 
         this.state = {
-            projects: {
-                assignForMe: 0,
-                createdByMe: 0
-            },
-
-            documents: {
+            tasks: {
                 assignForMe: 0,
                 createdByMe: 0
             },
@@ -32,14 +27,9 @@ class Dashboard extends Component {
             .then(data => {
 
                     this.setState({
-                        projects: {
-                            assignForMe: data.projects.assignForMe,
-                            createdByMe: data.projects.createdByMe,
-                        },
-
-                        documents: {
-                            assignForMe: data.documents.assignForMe,
-                            createdByMe: data.documents.createdByMe,
+                        tasks: {
+                            assignForMe: data.tasks.assignForMe,
+                            createdByMe: data.tasks.createdByMe,
                         },
                     })
                 }
@@ -56,35 +46,18 @@ class Dashboard extends Component {
                         <Col className="highlight">
 
                             <Row>
-                                <Col xs="12" sm="6" lg="3">
+                                <Col xs="12" sm="6" lg="6">
                                     <Widget01 color="danger"
-                                              header={this.state.projects.createdByMe}
-                                              mainText="Проекты"
+                                              header={this.state.tasks.createdByMe}
                                               smallText="Созданные мной"
                                               link="#"/>
                                 </Col>
-                                <Col xs="12" sm="6" lg="3">
+                                <Col xs="12" sm="6" lg="6">
                                     <Widget01 color="danger"
-                                              header={this.state.projects.assignForMe}
-                                              mainText="Проекты"
+                                              header={this.state.tasks.assignForMe}
                                               smallText="Назначенные на меня"
                                               link="#"/>
                                 </Col>
-                                <Col xs="12" sm="6" lg="3">
-                                    <Widget01 color="danger"
-                                              header={this.state.documents.createdByMe}
-                                              mainText="Документы"
-                                              smallText="Созданные мной"
-                                              link="#"/>
-                                </Col>
-                                <Col xs="12" sm="6" lg="3">
-                                    <Widget01 color="danger"
-                                              header={this.state.documents.assignForMe}
-                                              mainText="Документы"
-                                              smallText="Назначенные на меня"
-                                              link="#"/>
-                                </Col>
-
                             </Row>
 
 

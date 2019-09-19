@@ -59,7 +59,6 @@ class Widget01 extends Component {
             <Card className={classes} {...attributes}>
                 <CardBody>
                     <div className="h4 m-0">{header}</div>
-                    <div>{mainText}</div>
                     <div className="text-muted">{smallText}</div>
                     <div>{children}</div>
                 </CardBody>

@@ -3,10 +3,10 @@ import {
   Modal, ModalBody, ModalHeader,
 } from "reactstrap";
 
-import CustomTable from "../../core/components/CustomTable/CustomTable";
+import CustomTable from "../../../core/components/CustomTable/CustomTable";
 import DetailsTask from "./DetailsTask";
 
-class TableContracts extends Component {
+class TableTasks extends Component {
     constructor(props) {
         super(props);
 
@@ -57,7 +57,6 @@ class TableContracts extends Component {
 
                         <DetailsTask
                             details={this.state.details}
-                            typeTask="CONTRACT"
                         />
 
                     </ModalBody>
@@ -74,7 +73,7 @@ class TableContracts extends Component {
 }
 
 
-export default TableContracts;
+export default TableTasks;
 
 
 

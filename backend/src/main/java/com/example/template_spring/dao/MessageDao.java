@@ -7,6 +7,6 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public interface MessageDao extends JpaRepository<Message, Integer> {
-    List<Message> findByTaskId(int taskId);
+public interface MessageDao extends JpaRepository<Message, Long> {
+    List<Message> findByTaskId(Long taskId);
 }

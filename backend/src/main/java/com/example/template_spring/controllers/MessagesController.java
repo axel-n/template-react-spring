@@ -36,16 +36,16 @@ public class MessagesController {
 
     @GetMapping(value = "/tasks/{taskId}/messages", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public Mono<List<Message>> getMessages(@RequestHeader HttpHeaders headers,
-                                           @PathVariable("taskId") int taskId) {
+                                           @PathVariable("taskId") Long taskId) {
 
         Claims claims = jwtUtil.getAllClaimsFromHeaders(headers);
         log.info("user with claims {} want get messages for taskId {}", claims, taskId);
 
-        int userId = Integer.parseInt(claims.get("id").toString());
+        Long userId = Long.parseLong(claims.get("id").toString());
 
         List<Message> list = messageDao.findByTaskId(taskId);
         list.forEach(message -> {
-            if (message.getCreator().getId() == userId) {
+            if (message.getCreator().getId().equals(userId)) {
                 message.setRoleUser(MessageRoleUser.OWN);
             } else {
                 message.setRoleUser(MessageRoleUser.NOT_OWN);

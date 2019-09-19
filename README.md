@@ -1,45 +1,39 @@
-# Согласование задач
+# Сoordination of tasks
 
-## Принцип взаимодействия проекта
-- пользователи
-    - с разными ролями могут заходить и совершать некоторые действия
-- задача 
-  - идет по workFlow (ее тип может быть разный для разных классов)
-  - задача ставится на команду (по workFlow)
-  - любой пользователель из команды может начать ее выполнение
-  - когда пользователь помечает задачу, как выполненную - она переходит дальше по workFlow
+## Principle of project interaction
+- users
+     - with different roles can come in and perform some actions
+- tasks
+   - goes on workFlow (its type may be different for different classes)
+   - the task is put on the team (by workFlow)
+   - any user from the team can start its execution
+   - when the user marks the task as completed - it moves on to workFlow
+
+## Required
+- min knowledge spring
+- middle knowledge react
+
+## How to use
+- backend
+  - run in idea or ```mvn spring-boot:run```
+- front
+  - npm install
+  - npm start
+
+## Included
+- backend
+  - spring
+    - security (auth + roles)
+    - hibernate
+    - boot
+    - webflux
+  - some tests
+- front
+  - [react](https://reactjs.org/)
+  - [coreUi](https://coreui.io)
 
 ## Links
-[postman collerction](https://www.getpostman.com/collections/4c8cbd7d0e5ca1e48c4d)
+- [postman collerction](https://www.getpostman.com/collections/4c8cbd7d0e5ca1e48c4d)
+- [postman docs](https://documenter.getpostman.com/view/6588996/SVmwxdvi)
 
-## ToDo
-### обязательные
-- отображение документов (фронт)
-- загрузка файлов в документы и проекты (фронт + бек)
-- возможность писать комменты к документам и проектам (фронт + бек)
-- добавление комментов к задачам (бек + фронт)
 
-### необязательные
-- пофиксить раздвоение таблиц (сообщения и задачи)
-- добавление документов (бек + фронт)
-- добавление проектов (бек + фронт)
-- пофиксить баг с хлебными крошками. отображается путь из адресной строки, вместо названия маршрута (фронт)
-- назначена команда - отображать через перевод
-- пофиксить баг с выделением текущей станицы в навигации. выделяет другим цветом все, 
-  что похоже на текущую страницу (фронт)
-- cors test
-- добавить уведомления, когда задача передит по workFlow
-- добавить вебСокеты (бек + фронт. чтобы пользователи могли получать уведомления, 
-  если что-то происходит с их задачей)
-
-## Done
-- добавить фронт (реакт, coreUi)
-- типичный проект на спринге
-- авторизация через бд
-- добавление ролей (бек. чтобы разные группы пользователей могли по-разному действовать)
-- отображенижение задач (бек + фронт)
-- детальная информация об документе или проекте
-- доска проектов (фронт)
-- взятие в работу (бек + фрнт)
-- отметка о выполнении задачи (бек + фронт)
-- передача задачи дальше по workFlow (бек)

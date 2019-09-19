@@ -9,22 +9,22 @@ export default {
             },
         },
         {
-            name: 'Проекты',
+            name: 'Задачи',
             icon: 'icon-cursor',
             children: [
                 {
                     name: 'Созданные мною',
-                    url: '/projects/createdByMe',
+                    url: '/tasks/createdByMe',
                     icon: 'icon-cursor',
                 },
                 {
                     name: 'На мне',
-                    url: '/projects/assignedForMe',
+                    url: '/tasks/assignedForMe',
                     icon: 'icon-cursor',
                 },
                 {
                     name: 'Доска',
-                    url: '/projects',
+                    url: '/tasks',
                     icon: 'icon-cursor',
                 },
             ],

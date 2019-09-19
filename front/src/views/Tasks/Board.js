@@ -8,9 +8,9 @@ import CardHeader from "reactstrap/es/CardHeader";
 import {printColorStatus} from "../../core/utils/other/printStatus";
 import {dateProcessing} from "../../core/utils/other/dateProcessing";
 import CardTitle from "reactstrap/es/CardTitle";
-import DetailsTask from "./DetailsTask";
+import DetailsTask from "./Common/DetailsTask";
 
-class Contracts extends Component {
+class Board extends Component {
 
     constructor(props) {
         super(props);
@@ -30,7 +30,7 @@ class Contracts extends Component {
     }
 
     getData() {
-        let url = "/contracts/board";
+        let url = "/tasks/board";
         return request.sendRequest("GET", url)
             .then(data => {
                 this.setState({
@@ -118,4 +118,4 @@ class Contracts extends Component {
 
 }
 
-export default Contracts;
+export default Board;

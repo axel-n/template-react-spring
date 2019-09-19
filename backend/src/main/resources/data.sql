@@ -24,8 +24,8 @@ values (5, 'Админ', 3, 'admin@gmail.com', '$2a$10$LPWXDhi23gwFk.4tvfv8quqBC
 ---------------------------------------
 -- на менеджерах
 insert into task (id, name, creator, status, assign_team, description, cdat)
-values (1, 'contract1', 1, 0, 0, 'description1', CURRENT_TIMESTAMP),
-       (2, 'contract2', 2, 0, 0, 'description2', CURRENT_TIMESTAMP);
+values (1, 'task1', 1, 0, 0, 'description1', CURRENT_TIMESTAMP),
+       (2, 'task2', 2, 0, 0, 'description2', CURRENT_TIMESTAMP);
 
 -- -- комменты
 insert into message (id, user_id, comment, task_id, cdat)
@@ -35,9 +35,9 @@ values (1, 1, 'comment1 from Manager', 1, CURRENT_TIMESTAMP),
 
 -- на бухгалтере
 insert into task (id, name, creator, status, assign_team, description, cdat)
-values (3, 'contract4', 1, 0, 1, 'description1', CURRENT_TIMESTAMP),
-       (4, 'contract5', 2, 1, 1, 'description2', CURRENT_TIMESTAMP);
+values (3, 'task3', 1, 0, 1, 'description1', CURRENT_TIMESTAMP),
+       (4, 'task4', 2, 1, 1, 'description2', CURRENT_TIMESTAMP);
 
 -- у директора
 insert into task (id, name, creator, status, assign_team, description, cdat)
-values (5, 'contract5', 1, 0, 2, 'description1', CURRENT_TIMESTAMP);
+values (5, 'task5', 1, 0, 2, 'description1', CURRENT_TIMESTAMP);

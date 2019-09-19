@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import {Card, CardBody
 } from "reactstrap";
 
-import TableContracts from "./TableContracts";
+import TableTasks from "./Common/TableTasks";
 import TableFooter from "../../core/TableFooter";
 import {request} from "../../core/utils/request/request";
 import CardHeader from "reactstrap/es/CardHeader";
@@ -24,7 +24,7 @@ class CreatedByMe extends Component {
 
     getData(pagination) {
         let {currentPage, elementsPerPage} = {...this.state.pagination, ...pagination};
-         let url = "/contracts/createdByMe?page=" + currentPage + "&size=" + elementsPerPage;
+         let url = "/tasks/createdByMe?page=" + currentPage + "&size=" + elementsPerPage;
         return request.sendRequest("GET", url)
             .then(data => {
 
@@ -50,7 +50,7 @@ class CreatedByMe extends Component {
             <Card>
                 <CardHeader>Созданные мной</CardHeader>
                 <CardBody>
-                    <TableContracts
+                    <TableTasks
                         list={this.state.data}
                     />
 

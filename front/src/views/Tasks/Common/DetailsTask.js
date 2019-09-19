@@ -3,10 +3,10 @@ import {Button, Card, Col, Form, Input, Row} from "reactstrap";
 import CardBody from "reactstrap/es/CardBody";
 import Label from "reactstrap/es/Label";
 import FormGroup from "reactstrap/es/FormGroup";
-import {dateProcessing} from "../../core/utils/other/dateProcessing";
-import {printColorStatus} from "../../core/utils/other/printStatus";
-import {request} from "../../core/utils/request/request";
-import Conversation from "../../core/Conversation";
+import {dateProcessing} from "../../../core/utils/other/dateProcessing";
+import {printColorStatus} from "../../../core/utils/other/printStatus";
+import {request} from "../../../core/utils/request/request";
+import Conversation from "../../../core/Conversation";
 
 class DetailsTask extends Component {
 
@@ -38,10 +38,9 @@ class DetailsTask extends Component {
 
     getComments() {
 
-        let typeTask = this.props.typeTask;
         let taskId = this.props.details.id;
 
-        return request.sendRequest("GET", `/${typeTask}/${taskId}/messages`)
+        return request.sendRequest("GET", `/tasks/${taskId}/messages`)
             .then(response => {
 
                 this.setState({
@@ -76,9 +75,7 @@ class DetailsTask extends Component {
         let json = {};
         json.comment = event.target.comment.value;
 
-        let typeTask = this.props.typeTask;
-
-        let url = `/${typeTask}/${taskId}/message`;
+        let url = `/tasks/${taskId}/message`;
 
         return request.sendRequest("POST", url, JSON.stringify(json))
             .then(success => {
@@ -93,10 +90,8 @@ class DetailsTask extends Component {
 
     changeStatus(newStatus) {
 
-        let typeTask = this.props.typeTask.toLowerCase();
-
-        let contractId = this.props.details.id;
-        let url = `/${typeTask}/${contractId}/changeStatus`;
+        let taskId = this.props.details.id;
+        let url = `/tasks/${taskId}/changeStatus`;
 
         let json = {};
         json.newStatus = newStatus;

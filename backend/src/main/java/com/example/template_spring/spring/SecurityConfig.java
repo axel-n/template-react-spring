@@ -31,7 +31,7 @@ public class SecurityConfig {
                 .securityContextRepository(securityContextRepository)
                 .authorizeExchange()
                 .pathMatchers(HttpMethod.OPTIONS).permitAll()
-                .pathMatchers("/api/v1/login", "/console/**").permitAll()
+                .pathMatchers("/api/v1/login").permitAll()
                 .anyExchange().authenticated()
                 .and().build();
     }

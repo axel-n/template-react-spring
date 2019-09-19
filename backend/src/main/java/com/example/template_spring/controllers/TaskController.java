@@ -33,7 +33,7 @@ public class TaskController {
         this.userDao = userDao;
     }
 
-    @GetMapping(value = "/contracts/createdByMe", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    @GetMapping(value = "/tasks/createdByMe", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public Mono<Page<Task>> getContractCreatedByMe(@RequestHeader HttpHeaders headers,
                                                    @RequestParam(value = "page", defaultValue = "0") int page,
                                                    @RequestParam(value = "elementsPerPage", defaultValue = "10") int elementsPerPage) {
@@ -41,12 +41,12 @@ public class TaskController {
         Claims claims = jwtUtil.getAllClaimsFromHeaders(headers);
         log.info("user with claims {} want get created by yourself contract", claims);
 
-        int userId = Integer.parseInt(claims.get("id").toString());
+        Long userId = Long.parseLong(claims.get("id").toString());
         return Mono.just(taskDao.findByCreator_Id(userId, PageRequest.of(page, elementsPerPage)));
     }
 
 
-    @GetMapping(value = "/contracts/assignedForMe", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    @GetMapping(value = "/tasks/assignedForMe", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public Mono<Page<Task>> getContractAssignedForMe(@RequestHeader HttpHeaders headers,
                                                      @RequestParam(value = "page", defaultValue = "0") int page,
                                                      @RequestParam(value = "elementsPerPage", defaultValue = "10") int elementsPerPage) {
@@ -54,14 +54,14 @@ public class TaskController {
         Claims claims = jwtUtil.getAllClaimsFromHeaders(headers);
         log.info("user with claims {} want get assigned by yourself contract", claims);
 
-        int userId = Integer.parseInt(claims.get("id").toString());
+        Long userId = Long.parseLong(claims.get("id").toString());
         return Mono.just(taskDao.findByAssigner_Id(userId, PageRequest.of(page, elementsPerPage)));
     }
 
 
-    @PutMapping(value = "/contract/{contractId}/changeStatus", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    @PutMapping(value = "/tasks/{taskId}/changeStatus", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public Mono<Boolean> setNewContractStatus(@RequestHeader HttpHeaders headers,
-                                              @PathVariable Long contractId,
+                                              @PathVariable Long taskId,
                                               @RequestBody Map<String, String> params) {
 
         Claims claims = jwtUtil.getAllClaimsFromHeaders(headers);
@@ -70,10 +70,10 @@ public class TaskController {
 
             Long userId = Long.parseLong(claims.get("id").toString());
             TaskStatus newStatus = TaskStatus.valueOf(newStatusRow);
-            log.info("user with claims: {} want change status: {} for contractId: {}", claims, newStatus, contractId);
+            log.info("user with claims: {} want change status: {} for taskId: {}", claims, newStatus, taskId);
 
-            boolean resultUpdateStatus = updateStatus(contractId, userId, newStatus);
-            boolean resultChangeAssignTeam = changeAssignTeam(contractId, userId, newStatus);
+            boolean resultUpdateStatus = updateStatus(taskId, userId, newStatus);
+            boolean resultChangeAssignTeam = changeAssignTeam(taskId, userId, newStatus);
 
             return Mono.just(resultUpdateStatus && resultChangeAssignTeam);
         } else {
@@ -82,41 +82,39 @@ public class TaskController {
         }
     }
 
-    private boolean changeAssignTeam(Long contractId, Long userId, TaskStatus newStatus) {
-
+    private boolean changeAssignTeam(Long taskId, Long userId, TaskStatus newStatus) {
         if (newStatus == TaskStatus.DONE) {
-            Optional<Task> contractRow = taskDao.findById(contractId);
+            Optional<Task> taskRow = taskDao.findById(taskId);
 
-            if (contractRow.isPresent()) {
-                Task contract = contractRow.get();
+            if (taskRow.isPresent()) {
+                Task task = taskRow.get();
 
-                if (contract.getAssigner() != null && contract.getAssigner().getId().equals(userId)) {
-                    int oldAssignTeamIndex = contract.getAssignTeam().ordinal();
+                if (task.getAssigner() != null && task.getAssigner().getId().equals(userId)) {
+                    int oldAssignTeamIndex = task.getAssignTeam().ordinal();
                     int nextAssignTeamIndex = oldAssignTeamIndex + 1;
                     WorkFlow nextAssignTeam = WorkFlow.values()[nextAssignTeamIndex];
 
-                    Long countAffectedRowsAssignTeam = taskDao.changeAssignTeam(contractId, nextAssignTeam);
-                    return countAffectedRowsAssignTeam == 1;
+                    int countAffectedRows = taskDao.changeAssignTeam(taskId, nextAssignTeam);
+                    return countAffectedRows == 1;
                 }
             }
             return false;
-
         } else {
             return true;
         }
     }
 
-    private boolean updateStatus(Long contractId, Long userId, TaskStatus newStatus) {
+    private boolean updateStatus(Long taskId, Long userId, TaskStatus newStatus) {
 
         Optional<User> user = userDao.findById(userId);
         if (user.isPresent()) {
-            Long countAffectedRows = taskDao.updateStatus(contractId, user.get(), newStatus);
+            int countAffectedRows = taskDao.updateStatus(taskId, user.get(), newStatus);
             return countAffectedRows == 1;
         }
         return false;
     }
 
-    @GetMapping(value = "/contracts/board", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    @GetMapping(value = "/tasks/board", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public Mono<List<Map<String, Object>>> getContractsForDesk() {
 
         List<Map<String, Object>> response = new ArrayList<>();
