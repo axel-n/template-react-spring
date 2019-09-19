@@ -1,0 +1,15 @@
+### IntelliJ IDEA ###
+.idea
+*.iws
+*.iml
+*.ipr
+*.attach_pid*
+
+# backend
+backend/logs
+backend/target
+backend/out
+
+# front
+front/node_modules
+front/build
