@@ -1,6 +1,6 @@
 package com.example.template_spring.controllers;
 
-import com.example.template_spring.dao.AbstractRepository;
+import com.example.template_spring.repositories.AbstractRepository;
 import com.example.template_spring.models.AbstractEntity;
 import com.example.template_spring.spring.auth.JWTUtil;
 import io.jsonwebtoken.Claims;
@@ -9,6 +9,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpHeaders;
 import org.springframework.web.bind.annotation.*;
+import reactor.core.publisher.Mono;
 
 @Slf4j
 public abstract class AbstractController<E extends AbstractEntity, R extends AbstractRepository> {
@@ -22,29 +23,29 @@ public abstract class AbstractController<E extends AbstractEntity, R extends Abs
     }
 
     @GetMapping("/")
-    public Page<E> getAll(@RequestHeader HttpHeaders headers,
-                          @RequestParam(value = "page", defaultValue = "0") int page,
-                          @RequestParam(value = "size", defaultValue = "10") int size) {
+    public Mono<Page<E>> getAll(@RequestHeader HttpHeaders headers,
+                                @RequestParam(value = "page", defaultValue = "0") int page,
+                                @RequestParam(value = "size", defaultValue = "10") int size) {
 
         Claims claims = jwtUtil.getAllClaimsFromHeaders(headers);
         log.info("user with claims {} want get  entities", claims);
 
-        return repo.findAll(PageRequest.of(page, size));
+        return Mono.just(repo.findAll(PageRequest.of(page, size)));
     }
 
     @GetMapping("/{id}")
-    public E getOne(@RequestHeader HttpHeaders headers,
+    public Mono<E> getOne(@RequestHeader HttpHeaders headers,
                     @PathVariable Long id) {
 
         Claims claims = jwtUtil.getAllClaimsFromHeaders(headers);
         log.info("user with claims {} want get entity by id {}", claims, id);
 
-        return (E) repo.findOneById(id);
+        return Mono.just((E) repo.findOneById(id));
     }
 
 
     @PutMapping("/")
-    public Boolean update(@RequestHeader HttpHeaders headers,
+    public Mono<Boolean> update(@RequestHeader HttpHeaders headers,
                           @RequestBody E entity) {
 
         Claims claims = jwtUtil.getAllClaimsFromHeaders(headers);
@@ -52,22 +53,22 @@ public abstract class AbstractController<E extends AbstractEntity, R extends Abs
         repo.save(entity);
 
         // todo how to check this?
-        return true;
+        return Mono.just(true);
     }
 
     @PostMapping("/")
-    public Long create(@RequestHeader HttpHeaders headers,
+    public Mono<Long> create(@RequestHeader HttpHeaders headers,
                        @RequestBody E entity) {
 
         Claims claims = jwtUtil.getAllClaimsFromHeaders(headers);
         log.info("user with claims {} want create entity {}", claims, entity);
         entity = (E) repo.save(entity);
 
-        return entity.getId();
+        return Mono.just(entity.getId());
     }
 
     @DeleteMapping("/{id}")
-    public Boolean delete(@RequestHeader HttpHeaders headers,
+    public Mono<Boolean> delete(@RequestHeader HttpHeaders headers,
                           @PathVariable Long id) {
 
         Claims claims = jwtUtil.getAllClaimsFromHeaders(headers);
@@ -75,6 +76,6 @@ public abstract class AbstractController<E extends AbstractEntity, R extends Abs
         repo.deleteById(id);
 
         // todo how to check this? only 2 queries?
-        return true;
+        return Mono.just(true);
     }
 }

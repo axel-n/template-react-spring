@@ -1,6 +1,6 @@
 package com.example.template_spring.spring.auth;
 
-import com.example.template_spring.models.user.User;
+import com.example.template_spring.models.User;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;

@@ -1,7 +1,7 @@
 package com.example.template_spring.spring;
 
-import com.example.template_spring.dao.UserDao;
-import com.example.template_spring.models.user.User;
+import com.example.template_spring.repositories.UserDao;
+import com.example.template_spring.models.User;
 import com.example.template_spring.spring.auth.JWTUtil;
 import io.jsonwebtoken.Claims;
 import lombok.extern.slf4j.Slf4j;
@@ -19,6 +19,7 @@ import reactor.core.publisher.Mono;
 
 import java.io.Serializable;
 import java.util.Collections;
+import java.util.Objects;
 
 @Slf4j
 @Component
@@ -44,9 +45,11 @@ public class LocalAdminAuthenticationProvider implements ReactiveAuthenticationM
         String authToken = req.getCredentials().toString();
 
         String username = null;
+        String role = null;
         try {
             username = jwtUtil.getUsernameFromToken(authToken);
             Claims claims = jwtUtil.getAllClaimsFromToken(authToken);
+            role = String.valueOf(claims.get("role"));
 
             log.info("claims for user {}", claims);
         } catch (Exception e) {
@@ -54,7 +57,7 @@ public class LocalAdminAuthenticationProvider implements ReactiveAuthenticationM
         }
 
         if (username != null && jwtUtil.validateToken(authToken)) {
-            UsernamePasswordAuthenticationToken springUserDetails = new UsernamePasswordAuthenticationToken(username, null, Collections.singletonList(new SimpleGrantedAuthority("ROLE_USER")));
+            UsernamePasswordAuthenticationToken springUserDetails = new UsernamePasswordAuthenticationToken(username, null,  Collections.singletonList(new SimpleGrantedAuthority(role)));
             return Mono.just(springUserDetails);
         } else {
             log.error("user {} send invalid token {}", username, authToken);
@@ -68,32 +71,21 @@ public class LocalAdminAuthenticationProvider implements ReactiveAuthenticationM
      */
     public Mono<User> authenticate(String email, String password) throws AuthenticationException {
         return Mono.just(userDao.findOneByEmail(email))
-                .map(obj -> {
-                    if (obj.isEmpty()) {
-                        throw new RuntimeException(String.format("not found user email %s", email));
-                    } else {
-                        return obj.get();
-                    }
-                })
+                .filter(Objects::nonNull)
                 .map(user -> {
                     log.info("user with id {}, email {} want enter to system", user.getId(), user.getEmail());
-                    if (user.isEnabled()) {
-                        if (encoder.matches(password, user.getPassword())) {
-                            log.info("pass valid");
-                            return user;
-                        } else {
-                            log.info("pass not valid");
-                            return null;
-                        }
+                    if (encoder.matches(password, user.getPassword())) {
+                        log.info("pass valid");
+                        return user;
                     } else {
-                        log.info("user not enabled");
+                        log.info("pass not valid");
                         return null;
                     }
                 })
-		        .switchIfEmpty(Mono.defer(() -> {
-			       log.info("not found user with email {}", email);
+                .switchIfEmpty(Mono.defer(() -> {
+                    log.info("not found user with email {}", email);
                     return Mono.empty();
-		        }))
+                }))
                 .onErrorResume(e -> {
                     log.error("error authenticating: {}", e.getMessage());
                     return Mono.empty();
