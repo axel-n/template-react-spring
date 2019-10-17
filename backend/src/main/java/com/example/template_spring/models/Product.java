@@ -1,12 +1,14 @@
 package com.example.template_spring.models;
 
 import com.example.template_spring.models.dict.Category;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import lombok.NonNull;
 
-import javax.persistence.*;
+import javax.persistence.Entity;
 import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
-import java.util.Date;
 
 
 @Data
@@ -23,9 +25,4 @@ public class Product extends AbstractEntity {
 
     @NotNull
     private Category category;
-
-    @NotNull
-    private Date cdat;
-
-    private Date udat;
 }

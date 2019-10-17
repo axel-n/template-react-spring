@@ -1,17 +1,15 @@
-# Сoordination of tasks
+# Simple crud app
 
-## Principle of project interaction
-- users
-     - with different roles can come in and perform some actions
-- tasks
-   - goes on workFlow (its type may be different for different classes)
-   - the task is put on the team (by workFlow)
-   - any user from the team can start its execution
-   - when the user marks the task as completed - it moves on to workFlow
+## Progress
+ - ~~abstract controller, repository, entity~~
+- changes in front in progress
 
-## Required
-- min knowledge spring
-- middle knowledge react
+## Endpoints for entity
+- GET     /    - all entities with pagination
+- GET     /id  - one entity
+- POST    /    - create
+- PUT     /    - update
+- DELETE  /id  - delete
 
 ## How to use
 - backend
@@ -27,13 +25,14 @@
     - hibernate
     - boot
     - webflux
+    - abstract controller, repository, entity for simple creating 
   - some tests
 - front
   - [react](https://reactjs.org/)
   - [coreUi](https://coreui.io)
 
 ## Links
-- [postman collerction](https://www.getpostman.com/collections/4c8cbd7d0e5ca1e48c4d)
-- [postman docs](https://documenter.getpostman.com/view/6588996/SVmwxdvi)
+- [postman collerction](https://www.getpostman.com/collections/a6db44dfd371ed1d9a28)
+- [postman docs](https://documenter.getpostman.com/view/6588996/SVtZvS16)
 
 

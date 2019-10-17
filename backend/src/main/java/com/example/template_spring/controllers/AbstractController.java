@@ -11,6 +11,8 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Mono;
 
+import java.util.Date;
+
 @Slf4j
 public abstract class AbstractController<E extends AbstractEntity, R extends AbstractRepository> {
 
@@ -35,7 +37,7 @@ public abstract class AbstractController<E extends AbstractEntity, R extends Abs
 
     @GetMapping("/{id}")
     public Mono<E> getOne(@RequestHeader HttpHeaders headers,
-                    @PathVariable Long id) {
+                          @PathVariable Long id) {
 
         Claims claims = jwtUtil.getAllClaimsFromHeaders(headers);
         log.info("user with claims {} want get entity by id {}", claims, id);
@@ -46,10 +48,11 @@ public abstract class AbstractController<E extends AbstractEntity, R extends Abs
 
     @PutMapping("/")
     public Mono<Boolean> update(@RequestHeader HttpHeaders headers,
-                          @RequestBody E entity) {
+                                @RequestBody E entity) {
 
         Claims claims = jwtUtil.getAllClaimsFromHeaders(headers);
         log.info("user with claims {} want update entity {}", claims, entity);
+        entity.setUdat(new Date());
         repo.save(entity);
 
         // todo how to check this?
@@ -58,10 +61,11 @@ public abstract class AbstractController<E extends AbstractEntity, R extends Abs
 
     @PostMapping("/")
     public Mono<Long> create(@RequestHeader HttpHeaders headers,
-                       @RequestBody E entity) {
+                             @RequestBody E entity) {
 
         Claims claims = jwtUtil.getAllClaimsFromHeaders(headers);
         log.info("user with claims {} want create entity {}", claims, entity);
+        entity.setCdat(new Date());
         entity = (E) repo.save(entity);
 
         return Mono.just(entity.getId());
@@ -69,7 +73,7 @@ public abstract class AbstractController<E extends AbstractEntity, R extends Abs
 
     @DeleteMapping("/{id}")
     public Mono<Boolean> delete(@RequestHeader HttpHeaders headers,
-                          @PathVariable Long id) {
+                                @PathVariable Long id) {
 
         Claims claims = jwtUtil.getAllClaimsFromHeaders(headers);
         log.info("user with claims {} want delete entity by id {}", claims, id);

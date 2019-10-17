@@ -1,7 +1,6 @@
 package com.example.template_spring.spring.auth;
 
 import com.example.template_spring.spring.LocalAdminAuthenticationProvider;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -22,7 +21,6 @@ public class AuthenticationREST {
 
     private final JWTUtil jwtUtil;
     private final LocalAdminAuthenticationProvider localAdminAuthenticationProvider;
-    private final ObjectMapper OM = new ObjectMapper();
 
     public AuthenticationREST(JWTUtil jwtUtil, LocalAdminAuthenticationProvider localAdminAuthenticationProvider) {
         this.jwtUtil = jwtUtil;
