@@ -1,18 +1,17 @@
 package com.example.template_spring.controllers;
 
-import com.example.template_spring.dao.CommonRepository;
+import com.example.template_spring.dao.AbstractRepository;
 import com.example.template_spring.models.AbstractEntity;
 import com.example.template_spring.spring.auth.JWTUtil;
 import io.jsonwebtoken.Claims;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.http.HttpHeaders;
 import org.springframework.web.bind.annotation.*;
 
 @Slf4j
-public abstract class AbstractController<E extends AbstractEntity, R extends CommonRepository>{
+public abstract class AbstractController<E extends AbstractEntity, R extends AbstractRepository> {
 
     private final R repo;
     private final JWTUtil jwtUtil;
@@ -20,11 +19,6 @@ public abstract class AbstractController<E extends AbstractEntity, R extends Com
     public AbstractController(R repo, JWTUtil jwtUtil) {
         this.repo = repo;
         this.jwtUtil = jwtUtil;
-    }
-
-    public Long add(@RequestBody E entity) {
-        entity = (E) repo.save(entity);
-        return entity.getId();
     }
 
     @GetMapping("/")
@@ -59,6 +53,17 @@ public abstract class AbstractController<E extends AbstractEntity, R extends Com
 
         // todo how to check this?
         return true;
+    }
+
+    @PostMapping("/")
+    public Long create(@RequestHeader HttpHeaders headers,
+                       @RequestBody E entity) {
+
+        Claims claims = jwtUtil.getAllClaimsFromHeaders(headers);
+        log.info("user with claims {} want create entity {}", claims, entity);
+        entity = (E) repo.save(entity);
+
+        return entity.getId();
     }
 
     @DeleteMapping("/{id}")
