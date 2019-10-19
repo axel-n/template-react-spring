@@ -8,6 +8,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpHeaders;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Mono;
 
@@ -35,6 +36,7 @@ public abstract class AbstractController<E extends AbstractEntity, R extends Abs
         return Mono.just(repo.findAll(PageRequest.of(page, size)));
     }
 
+    @PreAuthorize("hasAuthority('ADMIN')")
     @GetMapping("/{id}")
     public Mono<E> getOne(@RequestHeader HttpHeaders headers,
                           @PathVariable Long id) {
@@ -46,6 +48,7 @@ public abstract class AbstractController<E extends AbstractEntity, R extends Abs
     }
 
 
+    @PreAuthorize("hasAuthority('ADMIN')")
     @PutMapping("/")
     public Mono<Boolean> update(@RequestHeader HttpHeaders headers,
                                 @RequestBody E entity) {
@@ -59,6 +62,7 @@ public abstract class AbstractController<E extends AbstractEntity, R extends Abs
         return Mono.just(true);
     }
 
+    @PreAuthorize("hasAuthority('ADMIN')")
     @PostMapping("/")
     public Mono<Long> create(@RequestHeader HttpHeaders headers,
                              @RequestBody E entity) {
@@ -71,6 +75,7 @@ public abstract class AbstractController<E extends AbstractEntity, R extends Abs
         return Mono.just(entity.getId());
     }
 
+    @PreAuthorize("hasAuthority('ADMIN')")
     @DeleteMapping("/{id}")
     public Mono<Boolean> delete(@RequestHeader HttpHeaders headers,
                                 @PathVariable Long id) {
