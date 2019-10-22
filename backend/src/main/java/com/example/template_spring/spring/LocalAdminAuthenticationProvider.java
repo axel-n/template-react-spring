@@ -1,7 +1,7 @@
 package com.example.template_spring.spring;
 
-import com.example.template_spring.repositories.UserDao;
 import com.example.template_spring.models.User;
+import com.example.template_spring.repositories.UserDao;
 import com.example.template_spring.spring.auth.JWTUtil;
 import io.jsonwebtoken.Claims;
 import lombok.extern.slf4j.Slf4j;
@@ -19,7 +19,7 @@ import reactor.core.publisher.Mono;
 
 import java.io.Serializable;
 import java.util.Collections;
-import java.util.Objects;
+import java.util.Optional;
 
 @Slf4j
 @Component
@@ -71,7 +71,9 @@ public class LocalAdminAuthenticationProvider implements ReactiveAuthenticationM
      */
     public Mono<User> authenticate(String email, String password) throws AuthenticationException {
         return Mono.just(userDao.findOneByEmail(email))
-                .filter(Objects::nonNull)
+                .filter(Optional::isPresent)
+                .map(Optional::get)
+                .doOnNext(user -> log.info("user {}", user))
                 .map(user -> {
                     log.info("user with id {}, email {} want enter to system", user.getId(), user.getEmail());
                     if (encoder.matches(password, user.getPassword())) {
